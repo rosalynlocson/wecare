@@ -45,4 +45,9 @@ class User extends Authenticatable
         return $this->role === 'receptionist';
     }
 
+    public function availabilities()
+    {
+        return $this->hasMany(Availability::class, 'doctor_id');
+    }
+
 }
