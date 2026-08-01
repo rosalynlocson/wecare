@@ -6,6 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TreatmentTypeController;
+use App\Http\Controllers\AppointmentController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,6 +52,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/treatment-types', [TreatmentTypeController::class, 'index'])->name('treatment-types.index');
     Route::post('/treatment-types', [TreatmentTypeController::class, 'store'])->name('treatment-types.store');
     Route::put('/treatment-types/{treatmentType}', [TreatmentTypeController::class, 'update'])->name('treatment-types.update');
+});
+
+Route::middleware(['auth', 'role:receptionist,doctor'])->group(function () {
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+});
+
+Route::middleware(['auth', 'role:receptionist'])->group(function () {
+    Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::get('/appointments/{appointment}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
+    Route::put('/appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
+    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+    Route::get('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancelForm'])->name('appointments.cancelForm');
+    Route::patch('/appointments/{appointment}/arrive', [AppointmentController::class, 'markArrived'])->name('appointments.arrive');
 });
 
 require __DIR__ . '/auth.php';
