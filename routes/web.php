@@ -5,6 +5,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TreatmentTypeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,6 +44,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:admin,doctor'])->group(function () {
     Route::get('/doctors/{doctor}/availability', [AvailabilityController::class, 'edit'])->name('availability.edit');
     Route::put('/doctors/{doctor}/availability', [AvailabilityController::class, 'update'])->name('availability.update');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/treatment-types', [TreatmentTypeController::class, 'index'])->name('treatment-types.index');
+    Route::post('/treatment-types', [TreatmentTypeController::class, 'store'])->name('treatment-types.store');
+    Route::put('/treatment-types/{treatmentType}', [TreatmentTypeController::class, 'update'])->name('treatment-types.update');
 });
 
 require __DIR__ . '/auth.php';
