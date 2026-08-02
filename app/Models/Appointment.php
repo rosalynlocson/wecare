@@ -47,4 +47,9 @@ class Appointment extends Model
     {
         return $this->belongsTo(User::class, 'booked_by');
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }

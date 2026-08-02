@@ -9,6 +9,7 @@ use App\Http\Controllers\TreatmentTypeController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\InvoiceController;
 
 
 
@@ -78,6 +79,13 @@ Route::middleware(['auth', 'role:doctor,admin'])->group(function () {
     Route::put('/records/{record}', [MedicalRecordController::class, 'update'])->name('records.update');
     Route::patch('/records/{record}/archive', [MedicalRecordController::class, 'archive'])->name('records.archive');
     Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
+});
+
+Route::middleware(['auth', 'role:receptionist'])->group(function () {
+    Route::post('/appointments/{appointment}/invoice', [InvoiceController::class, 'store'])->name('invoices.store');
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::patch('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])->name('invoices.updateStatus');
+    Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 });
 
 require __DIR__ . '/auth.php';

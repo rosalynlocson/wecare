@@ -60,9 +60,19 @@
                                         <a href="{{ route('appointments.cancelForm', $appt) }}"
                                             class="text-red-600 text-xs">Cancel</a>
                                     @endif
+                                    @if (auth()->user()->isReceptionist() && $appt->status === 'arrived')
+                                        @if ($appt->invoice)
+                                            <a href="{{ route('invoices.show', $appt->invoice) }}" class="text-blue-600 text-xs">View Invoice</a>
+                                        @else
+                                            <form method="POST" action="{{ route('invoices.store', $appt) }}" class="inline">
+                                                @csrf
+                                                <button type="submit" class="text-green-600 text-xs">Generate Invoice</button>
+                                            </form>
+                                        @endif
+                                    @endif
                                     @if (auth()->user()->isDoctor() && $appt->doctor_id === auth()->id())
-    <a href="{{ route('records.create', $appt) }}" class="text-blue-600 text-xs">Add Record</a>
-@endif
+                                        <a href="{{ route('records.create', $appt) }}" class="text-blue-600 text-xs">Add Record</a>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
