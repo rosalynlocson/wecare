@@ -60,6 +60,9 @@
                                         <a href="{{ route('appointments.cancelForm', $appt) }}"
                                             class="text-red-600 text-xs">Cancel</a>
                                     @endif
+                                    @if (auth()->user()->isDoctor() && $appt->doctor_id === auth()->id())
+    <a href="{{ route('records.create', $appt) }}" class="text-blue-600 text-xs">Add Record</a>
+@endif
                                 </td>
                             </tr>
                         @empty

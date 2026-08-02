@@ -7,6 +7,9 @@ use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TreatmentTypeController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\MedicalRecordController;
+use App\Http\Controllers\AttachmentController;
+
 
 
 Route::get('/', function () {
@@ -66,6 +69,15 @@ Route::middleware(['auth', 'role:receptionist'])->group(function () {
     Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
     Route::get('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancelForm'])->name('appointments.cancelForm');
     Route::patch('/appointments/{appointment}/arrive', [AppointmentController::class, 'markArrived'])->name('appointments.arrive');
+});
+
+Route::middleware(['auth', 'role:doctor,admin'])->group(function () {
+    Route::get('/appointments/{appointment}/records/create', [MedicalRecordController::class, 'create'])->name('records.create');
+    Route::post('/appointments/{appointment}/records', [MedicalRecordController::class, 'store'])->name('records.store');
+    Route::get('/records/{record}/edit', [MedicalRecordController::class, 'edit'])->name('records.edit');
+    Route::put('/records/{record}', [MedicalRecordController::class, 'update'])->name('records.update');
+    Route::patch('/records/{record}/archive', [MedicalRecordController::class, 'archive'])->name('records.archive');
+    Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
 });
 
 require __DIR__ . '/auth.php';

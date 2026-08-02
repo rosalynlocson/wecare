@@ -44,7 +44,13 @@ class PatientController extends Controller
 
     public function show(Patient $patient)
     {
-        return view('patients.show', compact('patient'));
+        $records = $patient->medicalRecords()
+            ->with(['appointment', 'createdBy', 'updatedBy', 'attachments'])
+            ->where('archived', false)
+            ->latest()
+            ->get();
+
+        return view('patients.show', compact('patient', 'records'));
     }
 
     public function edit(Patient $patient)
