@@ -93,13 +93,14 @@ class MedicalRecordController extends Controller
     }
 
     /**
-     * NFR-4: only the assigned doctor (or admin) can manage a patient's records.
+     * FR-9 / Role table: only the assigned doctor may create/edit/archive a record.
+     * Admin has view-only access (via the patient show page), not edit access.
      */
     private function authorizeDoctor(int $doctorId): void
     {
         $user = auth()->user();
 
-        if (! $user->isAdmin() && $user->id !== $doctorId) {
+        if ($user->id !== $doctorId) {
             abort(403);
         }
     }

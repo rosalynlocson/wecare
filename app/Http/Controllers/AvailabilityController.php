@@ -51,9 +51,15 @@ class AvailabilityController extends Controller
 
     private function authorizeAccess(User $doctor): void
     {
+        // The target user must actually be a doctor — prevents /doctors/{id}/availability
+        // from working against a receptionist or admin's user ID.
+        if (! $doctor->isDoctor()) {
+            abort(404);
+        }
+
         $user = auth()->user();
 
-        // Admin can edit any doctor's availability; a doctor can only edit their own (NFR-4-style ownership check)
+        // Admin can edit any doctor's availability; a doctor can only edit their own.
         if (! $user->isAdmin() && $user->id !== $doctor->id) {
             abort(403);
         }

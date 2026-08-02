@@ -43,8 +43,7 @@
                                     @if ($appt->status === 'arrived')
                                         <span class="text-green-700 bg-green-50 text-xs px-2 py-0.5 rounded-md">Arrived</span>
                                     @elseif ($appt->status === 'cancelled')
-                                        <span class="text-red-700 bg-red-50 text-xs px-2 py-0.5 rounded-md"
-                                            title="{{ $appt->cancellation_note }}">Cancelled</span>
+                                        <span class="text-red-700 bg-red-50 text-xs px-2 py-0.5 rounded-md">Cancelled</span>
                                     @else
                                         <span class="text-gray-500 bg-gray-100 text-xs px-2 py-0.5 rounded-md">Scheduled</span>
                                     @endif
@@ -69,6 +68,14 @@
                                                 <button type="submit" class="text-green-600 text-xs">Generate Invoice</button>
                                             </form>
                                         @endif
+                                    @endif
+                                    @if ($appt->status === 'cancelled')
+                                        <details class="inline-block text-left">
+                                            <summary class="text-gray-500 text-xs cursor-pointer list-none inline">View Note</summary>
+                                            <div class="text-xs text-gray-600 bg-gray-50 border rounded-md p-2 mt-1 max-w-xs">
+                                                {{ $appt->cancellation_note }}
+                                            </div>
+                                        </details>
                                     @endif
                                     @if (auth()->user()->isDoctor() && $appt->doctor_id === auth()->id())
                                         <a href="{{ route('records.create', $appt) }}" class="text-blue-600 text-xs">Add Record</a>
