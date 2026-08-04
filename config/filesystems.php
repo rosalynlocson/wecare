@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -60,6 +60,17 @@ return [
             'report' => false,
         ],
 
+        'attachments' => [
+            'driver' => 's3',
+            'key' => env('B2_ACCESS_KEY_ID'),
+            'secret' => env('B2_SECRET_ACCESS_KEY'),
+            'region' => env('B2_REGION', 'us-west-004'),
+            'bucket' => env('B2_BUCKET'),
+            'endpoint' => env('B2_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            'throw' => true,
+            'report' => true,
+        ],
     ],
 
     /*

@@ -12,7 +12,7 @@
                         <p class="text-sm text-gray-600 mb-2">Existing attachments</p>
                         @foreach ($record->attachments as $attachment)
                             <div class="flex items-center justify-between text-sm border rounded-md px-3 py-2 mb-1">
-                                <a href="{{ Storage::url($attachment->file_path) }}" target="_blank" class="text-blue-600">{{ $attachment->original_name }}</a>
+                                <a href="{{ Storage::disk('attachments')->temporaryUrl($attachment->file_path, now()->addMinutes(30)) }}" target="_blank" class="text-blue-600">{{ $attachment->original_name }}</a>
                                 <form method="POST" action="{{ route('attachments.destroy', $attachment) }}" onsubmit="return confirm('Remove this file?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="text-red-600 text-xs">Remove</button>

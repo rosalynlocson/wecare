@@ -49,7 +49,7 @@
                         @if ($record->attachments->count())
                             <div class="flex gap-2 flex-wrap mt-2">
                                 @foreach ($record->attachments as $attachment)
-                                    <a href="{{ Storage::url($attachment->file_path) }}" target="_blank" class="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded-md">
+                                    <a href="{{ Storage::disk('attachments')->temporaryUrl($attachment->file_path, now()->addMinutes(30)) }}" target="_blank" class="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded-md">
                                         📄 {{ $attachment->original_name }}
                                     </a>
                                 @endforeach

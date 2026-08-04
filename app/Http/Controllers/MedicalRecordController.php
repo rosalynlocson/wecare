@@ -74,24 +74,26 @@ class MedicalRecordController extends Controller
         return redirect()->route('patients.show', $record->patient_id)
             ->with('status', 'Medical record archived.');
     }
-
     private function storeAttachments(Request $request, MedicalRecord $record): void
     {
-        if (! $request->hasFile('attachments')) {
-            return;
-        }
+        $file = $request->file('attachments')[0];
 
-        foreach ($request->file('attachments') as $file) {
-            $path = $file->store('medical-records', 'public');
+        try {
+            $result = \Storage::disk('attachments')->put(
+                'medical-records/test-stream.pdf',
+                file_get_contents($file->getRealPath())
+            );
 
-            $record->attachments()->create([
-                'file_path' => $path,
-                'original_name' => $file->getClientOriginalName(),
-                'uploaded_by' => auth()->id(),
+            dd(['manual_put_result' => $result]);
+        } catch (\Throwable $e) {
+            dd([
+                'exception_class' => get_class($e),
+                'message' => $e->getMessage(),
+                'previous_class' => $e->getPrevious() ? get_class($e->getPrevious()) : null,
+                'previous_message' => $e->getPrevious()?->getMessage(),
             ]);
         }
     }
-
     /**
      * FR-9 / Role table: only the assigned doctor may create/edit/archive a record.
      * Admin has view-only access (via the patient show page), not edit access.

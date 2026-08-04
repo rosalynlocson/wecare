@@ -87,4 +87,13 @@ Route::middleware(['auth', 'role:receptionist'])->group(function () {
     Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 });
 
+Route::get('/test-b2', function () {
+    try {
+        \Storage::disk('attachments')->put('test.txt', 'hello world');
+        return 'SUCCESS: file uploaded to Backblaze';
+    } catch (\Throwable $e) {
+        return 'ERROR: ' . $e->getMessage();
+    }
+});
+
 require __DIR__ . '/auth.php';

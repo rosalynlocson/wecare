@@ -16,7 +16,7 @@ class AttachmentController extends Controller
             abort(403);
         }
 
-        Storage::disk('public')->delete($attachment->file_path);
+        Storage::disk('attachments')->delete($attachment->file_path);
         $attachment->delete();
 
         return redirect()->back()->with('status', 'Attachment removed.');
