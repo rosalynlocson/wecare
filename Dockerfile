@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: PHP + Nginx runtime
-FROM richarvey/nginx-php-fpm:latest
+FROM richarvey/nginx-php-fpm:php83-fpm
 
 WORKDIR /var/www/html
 
