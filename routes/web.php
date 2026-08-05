@@ -71,7 +71,7 @@ Route::middleware(['auth', 'role:receptionist'])->group(function () {
     Route::patch('/appointments/{appointment}/arrive', [AppointmentController::class, 'markArrived'])->name('appointments.arrive');
 });
 
-Route::middleware(['auth', 'role:doctor,admin'])->group(function () {
+Route::middleware(['auth', 'role:doctor'])->group(function () {
     Route::get('/appointments/{appointment}/records/create', [MedicalRecordController::class, 'create'])->name('records.create');
     Route::post('/appointments/{appointment}/records', [MedicalRecordController::class, 'store'])->name('records.store');
     Route::get('/records/{record}/edit', [MedicalRecordController::class, 'edit'])->name('records.edit');
@@ -87,13 +87,5 @@ Route::middleware(['auth', 'role:receptionist'])->group(function () {
     Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 });
 
-Route::get('/test-b2', function () {
-    try {
-        \Storage::disk('attachments')->put('test.txt', 'hello world');
-        return 'SUCCESS: file uploaded to Backblaze';
-    } catch (\Throwable $e) {
-        return 'ERROR: ' . $e->getMessage();
-    }
-});
 
 require __DIR__ . '/auth.php';

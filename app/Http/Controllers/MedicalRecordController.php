@@ -76,21 +76,17 @@ class MedicalRecordController extends Controller
     }
     private function storeAttachments(Request $request, MedicalRecord $record): void
     {
-        $file = $request->file('attachments')[0];
+        if (!$request->hasFile('attachments')) {
+            return;
+        }
 
-        try {
-            $result = \Storage::disk('attachments')->put(
-                'medical-records/test-stream.pdf',
-                file_get_contents($file->getRealPath())
-            );
+        foreach ($request->file('attachments') as $file) {
+            $path = $file->store('medical-records', 'attachments');
 
-            dd(['manual_put_result' => $result]);
-        } catch (\Throwable $e) {
-            dd([
-                'exception_class' => get_class($e),
-                'message' => $e->getMessage(),
-                'previous_class' => $e->getPrevious() ? get_class($e->getPrevious()) : null,
-                'previous_message' => $e->getPrevious()?->getMessage(),
+            $record->attachments()->create([
+                'file_path' => $path,
+                'original_name' => $file->getClientOriginalName(),
+                'uploaded_by' => auth()->id(),
             ]);
         }
     }
