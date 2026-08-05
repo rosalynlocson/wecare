@@ -15,25 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@wecare.test',
-            'password' => bcrypt('password'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@wecare.test'],
+            ['name' => 'Admin User', 'password' => bcrypt('password'), 'role' => 'admin']
+        );
 
-        User::factory()->create([
-            'name' => 'Dr. Reyes',
-            'email' => 'doctor@wecare.test',
-            'password' => bcrypt('password'),
-            'role' => 'doctor',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'doctor@wecare.test'],
+            ['name' => 'Dr. Reyes', 'password' => bcrypt('password'), 'role' => 'doctor']
+        );
 
-        User::factory()->create([
-            'name' => 'Receptionist User',
-            'email' => 'receptionist@wecare.test',
-            'password' => bcrypt('password'),
-            'role' => 'receptionist',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'receptionist@wecare.test'],
+            ['name' => 'Receptionist User', 'password' => bcrypt('password'), 'role' => 'receptionist']
+        );
     }
 }
