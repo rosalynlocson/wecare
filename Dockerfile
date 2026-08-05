@@ -9,18 +9,19 @@ RUN npm run build
 # Stage 2: PHP + Nginx runtime
 FROM richarvey/nginx-php-fpm:latest
 
+WORKDIR /var/www/html
+
 COPY . .
 COPY --from=assets /app/public/build ./public/build
 
-ENV SKIP_COMPOSER=0
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
 ENV WEBROOT=/var/www/html/public
 ENV PHP_ERRORS_STDERR=1
-ENV RUN_SCRIPTS=1
 ENV REAL_IP_HEADER=1
-ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 ENV LOG_CHANNEL=stderr
-ENV RUN_MIGRATIONS=1
+ENV SKIP_COMPOSER=1
 
-CMD ["/start.sh"]
+CMD ["/bin/sh", "-c", "php artisan config:clear && php artisan migrate --force && /start.sh"]
